@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenRefreshView
 
+from finance_backend.views import home
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -28,4 +30,6 @@ urlpatterns = [
     # Core features
     path('api/', include('transactions.urls')),
     path('api/dashboard/', include('dashboard.urls')),
+    
+    path('', home),
 ]
