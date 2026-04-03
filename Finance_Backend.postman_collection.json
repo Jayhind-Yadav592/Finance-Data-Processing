@@ -1,0 +1,335 @@
+{
+  "info": {
+    "name": "Finance Backend API",
+    "_postman_id": "finance-backend-collection",
+    "description": "Complete API collection for Finance Data Processing & Access Control Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url",      "value": "http://127.0.0.1:8000" },
+    { "key": "access_token",  "value": "" },
+    { "key": "refresh_token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/register/",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"name\": \"Test User\",\n  \"password\": \"Test@1234\",\n  \"role\": \"viewer\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login (get token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('access_token', json.access);",
+                  "pm.collectionVariables.set('refresh_token', json.refresh);",
+                  "console.log('Token saved!');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/login/",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@finance.com\",\n  \"password\": \"Admin@1234\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/token/refresh/",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "My Profile (GET)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/auth/me/",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Management (Admin Only)",
+      "item": [
+        {
+          "name": "List All Users",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/auth/users/",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        },
+        {
+          "name": "Update User Role",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/auth/users/2/role/",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"analyst\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update User Status (Deactivate)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/auth/users/3/status/",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_active\": false\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "List All Transactions",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/transactions/",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        },
+        {
+          "name": "Filter — Income only",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/transactions/?type=income",
+              "query": [{ "key": "type", "value": "income" }]
+            },
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        },
+        {
+          "name": "Filter — By Category",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/transactions/?category=salary",
+              "query": [{ "key": "category", "value": "salary" }]
+            },
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        },
+        {
+          "name": "Filter — Date Range",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/transactions/?date_from=2024-01-01&date_to=2024-12-31",
+              "query": [
+                { "key": "date_from", "value": "2024-01-01" },
+                { "key": "date_to",   "value": "2024-12-31" }
+              ]
+            },
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        },
+        {
+          "name": "Filter — Amount Range",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/transactions/?amount_min=1000&amount_max=10000",
+              "query": [
+                { "key": "amount_min", "value": "1000" },
+                { "key": "amount_max", "value": "10000" }
+              ]
+            },
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        },
+        {
+          "name": "Pagination",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/transactions/?page=1",
+              "query": [{ "key": "page", "value": "1" }]
+            },
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        },
+        {
+          "name": "Get Single Transaction",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/transactions/1/",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        },
+        {
+          "name": "Create Transaction (Analyst/Admin)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/transactions/",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 50000.00,\n  \"type\": \"income\",\n  \"category\": \"salary\",\n  \"date\": \"2024-03-01\",\n  \"notes\": \"March salary\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Transaction (Admin Only)",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/transactions/1/",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 55000.00,\n  \"type\": \"income\",\n  \"category\": \"salary\",\n  \"date\": \"2024-03-01\",\n  \"notes\": \"Updated March salary\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Transaction — Soft (Admin Only)",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/transactions/1/",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Summary (All roles)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/dashboard/summary/",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        },
+        {
+          "name": "Category Wise (Analyst+)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/dashboard/category-wise/",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        },
+        {
+          "name": "Monthly Trends (Analyst+)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/dashboard/trends/",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        },
+        {
+          "name": "Weekly Trends (Analyst+)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/dashboard/trends/weekly/",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        },
+        {
+          "name": "Recent Activity (All roles)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/dashboard/recent/",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Error Cases (Test Access Control)",
+      "item": [
+        {
+          "name": "Viewer tries to CREATE — expect 403",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/transactions/",
+            "header": [
+              { "key": "Authorization", "value": "Bearer <viewer_token_here>" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 100,\n  \"type\": \"income\",\n  \"category\": \"test\",\n  \"date\": \"2024-01-01\"\n}"
+            }
+          }
+        },
+        {
+          "name": "No token — expect 401",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/transactions/"
+          }
+        },
+        {
+          "name": "Invalid amount — expect 400",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/transactions/",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": -500,\n  \"type\": \"income\",\n  \"category\": \"test\",\n  \"date\": \"2024-01-01\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Transaction not found — expect 404",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/transactions/99999/",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }]
+          }
+        }
+      ]
+    }
+  ]
+}

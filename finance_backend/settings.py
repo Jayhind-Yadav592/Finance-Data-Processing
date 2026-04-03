@@ -57,7 +57,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'finance_backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -69,13 +68,12 @@ WSGI_APPLICATION = 'finance_backend.wsgi.application'
 # }
 
 # ── Database (MySQL) ─────────────────────────────────────────────────────────
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'finance_db',
         'USER': 'root',          
-        'PASSWORD': 'jay@3354', 
+        'PASSWORD': 'jay@3354',  
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
@@ -100,6 +98,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
+    'EXCEPTION_HANDLER': 'finance_backend.exceptions.custom_exception_handler',
 }
 
 SIMPLE_JWT = {
@@ -117,4 +116,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
 

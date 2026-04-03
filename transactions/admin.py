@@ -1,3 +1,16 @@
-from django.contrib import admin
 
-# Register your models here.
+from django.contrib import admin
+from .models import Transaction
+
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    list_display   = ['id', 'user', 'type', 'category', 'amount', 'date', 'is_deleted']
+    list_filter    = ['type', 'category', 'is_deleted']
+    search_fields  = ['category', 'notes', 'user__email']
+    ordering       = ['-date']
+    date_hierarchy = 'date'
+
+    # Soft-deleted records bhi admin mein dikh sakein
+    def get_queryset(self, request):
+        return Transaction.objects.all()
