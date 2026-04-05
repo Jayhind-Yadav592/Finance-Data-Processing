@@ -1,11 +1,11 @@
 from pathlib import Path
 from datetime import timedelta
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-change-this-in-production'
-
-DEBUG = True
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this')
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
@@ -68,17 +68,28 @@ WSGI_APPLICATION = 'finance_backend.wsgi.application'
 # }
 
 # ── Database (MySQL) ─────────────────────────────────────────────────────────
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'finance_db',
+#         'USER': 'root',          
+#         'PASSWORD': 'jay@3354',  
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',
+#         },
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'finance_db',
-        'USER': 'root',          
-        'PASSWORD': 'jay@3354',  
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-        },
+        'NAME':     os.environ.get('MYSQL_DATABASE', 'finance_db'),
+        'USER':     os.environ.get('MYSQL_USER',     'root'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'jay@3354'),
+        'HOST':     os.environ.get('MYSQL_HOST',     'localhost'),
+        'PORT':     os.environ.get('MYSQL_PORT',     '3306'),
+        'OPTIONS':  {'charset': 'utf8mb4'},
     }
 }
 
