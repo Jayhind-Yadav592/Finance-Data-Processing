@@ -84,11 +84,11 @@ WSGI_APPLICATION = 'finance_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':     os.environ.get('MYSQL_DATABASE', 'finance_db'),
-        'USER':     os.environ.get('MYSQL_USER',     'root'),
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'jay@3354'),
-        'HOST':     os.environ.get('MYSQL_HOST',     'localhost'),
-        'PORT':     os.environ.get('MYSQL_PORT',     '3306'),
+        'NAME':     os.environ.get('MYSQLDATABASE', 'finance_db'),
+        'USER':     os.environ.get('MYSQLUSER',     'root'),
+        'PASSWORD': os.environ.get('MYSQLPASSWORD', 'jay@3354'),
+        'HOST':     os.environ.get('MYSQLHOST',     'localhost'),
+        'PORT':     os.environ.get('MYSQLPORT',     '3306'),
         'OPTIONS':  {'charset': 'utf8mb4'},
     }
 }
