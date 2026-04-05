@@ -13,11 +13,8 @@ from .permissions import IsAdmin, IsActiveUser
 
 
 class RegisterView(generics.CreateAPIView):
-    """
-    POST /api/auth/register/
-    Koi bhi register kar sakta hai.
-    Default role: viewer
-    """
+    # POST /api/auth/register/
+
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
 
@@ -32,18 +29,17 @@ class RegisterView(generics.CreateAPIView):
 
 
 class LoginView(TokenObtainPairView):
-    """
-    POST /api/auth/login/
-    Returns access + refresh JWT tokens.
-    """
+   
+    # POST /api/auth/login/
+    # Returns access + refresh JWT tokens. 
     permission_classes = [AllowAny]
 
 
 class MeView(generics.RetrieveUpdateAPIView):
-    """
-    GET  /api/auth/me/   — apna profile dekho
-    PUT  /api/auth/me/   — apna naam update karo
-    """
+    
+    # GET  /api/auth/me/   — checke profile dekho
+    # PUT  /api/auth/me/   — update Name 
+   
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsActiveUser]
 
@@ -52,20 +48,18 @@ class MeView(generics.RetrieveUpdateAPIView):
 
 
 class UserListView(generics.ListAPIView):
-    """
-    GET /api/users/
-    Admin only: sab users ki list.
-    """
+    # GET /api/users/
+    # Admin only: all users list.
+    
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsAdmin]
     queryset = User.objects.all().order_by('-created_at')
 
 
 class UpdateUserRoleView(APIView):
-    """
-    PATCH /api/users/<id>/role/
-    Admin only: kisi bhi user ka role change karo.
-    """
+    # PATCH /api/users/<id>/role/
+    # Admin only:  Update role of a specific user
+    
     permission_classes = [IsAuthenticated, IsAdmin]
 
     def patch(self, request, pk):
@@ -81,10 +75,10 @@ class UpdateUserRoleView(APIView):
 
 
 class UpdateUserStatusView(APIView):
-    """
-    PATCH /api/users/<id>/status/
-    Admin only: user ko active/inactive karo.
-    """
+    
+    # PATCH /api/users/<id>/status/
+    # Admin only: user ko active/inactive karo.
+    
     permission_classes = [IsAuthenticated, IsAdmin]
 
     def patch(self, request, pk):

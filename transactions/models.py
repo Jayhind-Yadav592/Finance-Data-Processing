@@ -14,7 +14,7 @@ class Transaction(models.Model):
     category    = models.CharField(max_length=100)
     date        = models.DateField()
     notes       = models.TextField(blank=True, default='')
-    is_deleted  = models.BooleanField(default=False)   # soft delete support
+    is_deleted  = models.BooleanField(default=False)  
     created_at  = models.DateTimeField(auto_now_add=True)
     updated_at  = models.DateTimeField(auto_now=True)
 

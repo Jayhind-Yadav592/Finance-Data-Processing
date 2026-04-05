@@ -11,6 +11,6 @@ class TransactionAdmin(admin.ModelAdmin):
     ordering       = ['-date']
     date_hierarchy = 'date'
 
-    # Soft-deleted records bhi admin mein dikh sakein
+
     def get_queryset(self, request):
         return Transaction.objects.all()

@@ -99,6 +99,7 @@ class TransactionCRUDTests(TestCase):
         self.auth('admin@t.com')
         res = self.client.delete(reverse('transaction-detail', args=[t.id]))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+        
         # Verify it's soft deleted (not in list)
         t.refresh_from_db()
         self.assertTrue(t.is_deleted)

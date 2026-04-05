@@ -11,11 +11,11 @@ from users.permissions import IsAnalystOrAdmin, IsActiveUser
 
 
 class SummaryView(APIView):
-    """
-    GET /api/dashboard/summary/
-    Returns: total income, total expense, net balance
-    Access: Viewer, Analyst, Admin
-    """
+
+    # GET /api/dashboard/summary/
+    # Returns: total income, total expense, net balance
+    # Access: Viewer, Analyst, Admin
+   
     permission_classes = [IsAuthenticated, IsActiveUser]
 
     def get(self, request):
@@ -38,11 +38,11 @@ class SummaryView(APIView):
 
 
 class CategoryWiseView(APIView):
-    """
-    GET /api/dashboard/category-wise/
-    Returns: har category ka total amount (income + expense alag)
-    Access: Analyst, Admin
-    """
+   
+    # GET /api/dashboard/category-wise/
+    # Returns: har category ka total amount (income + expense alag)
+    # Access: Analyst, Admin
+
     permission_classes = [IsAuthenticated, IsActiveUser, IsAnalystOrAdmin]
 
     def get(self, request):
@@ -58,11 +58,11 @@ class CategoryWiseView(APIView):
 
 
 class MonthlyTrendView(APIView):
-    """
-    GET /api/dashboard/trends/
-    Returns: har month ka income aur expense total
-    Access: Analyst, Admin
-    """
+   
+    # GET /api/dashboard/trends/
+    # Returns: har month ka income aur expense total
+    # Access: Analyst, Admin
+
     permission_classes = [IsAuthenticated, IsActiveUser, IsAnalystOrAdmin]
 
     def get(self, request):
@@ -87,11 +87,11 @@ class MonthlyTrendView(APIView):
 
 
 class WeeklyTrendView(APIView):
-    """
-    GET /api/dashboard/trends/weekly/
-    Returns: last 8 weeks ka income + expense
-    Access: Analyst, Admin
-    """
+
+    # GET /api/dashboard/trends/weekly/
+    # Returns: last 8 weeks ka income + expense
+    # Access: Analyst, Admin
+   
     permission_classes = [IsAuthenticated, IsActiveUser, IsAnalystOrAdmin]
 
     def get(self, request):
@@ -115,11 +115,11 @@ class WeeklyTrendView(APIView):
 
 
 class RecentActivityView(APIView):
-    """
-    GET /api/dashboard/recent/
-    Returns: last 10 transactions
-    Access: Viewer, Analyst, Admin
-    """
+  
+    # GET /api/dashboard/recent/
+    # Returns: last 10 transactions
+    # Access: Viewer, Analyst, Admin
+    
     permission_classes = [IsAuthenticated, IsActiveUser]
 
     def get(self, request):
